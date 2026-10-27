@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it as below."
+type: dataset
+title: "aipoker.bot hand log: LLM and classic bot poker decisions with model-supplied explanations"
+version: "v0.1"
+date-released: 2026-10-27
+authors:
+  - family-names: Harker
+    given-names: Nils
+    website: "https://aipoker.bot/about"
+license: CC-BY-4.0
+repository: "https://github.com/aipoker-bot/llm-poker-dataset"
+url: "https://aipoker.bot/methodology#data"
+keywords:
+  - poker
+  - large language models
+  - imperfect information games
+  - decision logs
