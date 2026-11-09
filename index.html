@@ -80,11 +80,16 @@ footer a { color: var(--muted); }
 <table>
 <thead><tr><th>Model</th><th>Decisions</th><th>Hands</th><th>Illegal</th><th>Misfire</th><th>Claimed a hand it didn't have</th><th>Folded the best hand</th><th>Called dead</th><th>Won at showdown</th></tr></thead>
 <tbody>
-<tr><td>GPT-6 Astra<br><code>openai/gpt-6-astra</code></td><td>1,498</td><td>727</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>28.4%</td><td>17.5%</td><td>59.3%</td></tr>
-<tr><td>GLM 4.7 Flash<br><code>z-ai/glm-4.7-flash</code></td><td>1,485</td><td>510</td><td>2.9%</td><td>0.3%</td><td>6.2%</td><td>31.1%</td><td>61.9%</td><td>25.2%</td></tr>
+<tr><td>GLM 4.7 Flash<br><code>z-ai/glm-4.7-flash</code></td><td>1,902</td><td>643</td><td>3.0%</td><td>0.3%</td><td>6.5%</td><td>32.3%</td><td>58.8%</td><td>27.1%</td></tr>
+<tr><td>GPT-6 Astra<br><code>openai/gpt-6-astra</code></td><td>1,659</td><td>789</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>26.6%</td><td>16.2%</td><td>61.8%</td></tr>
+<tr><td>Qwen 3.8 27B<br><code>qwen/qwen3.8-27b</code></td><td>1,393</td><td>582</td><td>0.1%</td><td>0.0%</td><td>1.5%</td><td>27.1%</td><td>50.7%</td><td>29.3%</td></tr>
+<tr><td>Ministral 3 14B<br><code>mistralai/ministral-14b-2512</code></td><td>1,366</td><td>543</td><td>0.1%</td><td>0.4%</td><td>2.4%</td><td>30.4%</td><td>46.5%</td><td>33.3%</td></tr>
+<tr><td>Gemma 4 31B<br><code>google/gemma-4-31b-it</code></td><td>1,304</td><td>542</td><td>0.0%</td><td>0.1%</td><td>0.5%</td><td>18.5%</td><td>39.2%</td><td>49.1%</td></tr>
+<tr><td>DeepSeek 4 Flash<br><code>deepseek/deepseek-v4-flash</code></td><td>1,061</td><td>275</td><td>2.8%</td><td>0.0%</td><td>0.7%</td><td>14.4%</td><td>66.6%</td><td>37.9%</td></tr>
+<tr><td>MiniMax M3<br><code>minimax/minimax-m3</code></td><td>1,039</td><td>478</td><td>0.0%</td><td>1.0%</td><td>0.3%</td><td>26.3%</td><td>54.1%</td><td>41.9%</td></tr>
 </tbody>
 </table>
-<p class="note">All models: 22,724 decisions in games people played, 39 models, 2 over the bar. Updated 2026-11-02.</p>
+<p class="note">All models: 29,865 decisions in games people played, 50 models, 7 over the bar. Updated 2026-11-09.</p>
 <!-- results:end -->
 </div>
 <p>Illegal, Misfire, and "Claimed a hand it didn't have". These are things you can check without looking at anyone's cards. Illegal and Misfire are fractions of the total decisions by the model. The third one is a fraction of reasons claiming the model had a stronger hand than it actually had. For instance "my flush" but without a flush. A draw is not counted.</p>
