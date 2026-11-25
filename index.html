@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI poker bot: LLMs vs people, results and hand data</title>
-<meta name="description" content="Results and an open dataset from aipoker.bot, where people play no-limit hold'em against 30 language models and older poker bots. Every model decision is logged with its reason.">
+<meta name="description" content="Results and an open dataset from aipoker.bot, where people play no-limit hold'em against 37 language models and older poker bots. Every model decision is logged with its reason.">
 <link rel="canonical" href="https://aipoker-bot.github.io/llm-poker-dataset/">
 <meta property="og:title" content="AI poker bot: LLMs vs people, results and hand data">
 <meta property="og:description" content="Which language models play poker without breaking, from games against people. Open JSONL dataset, CC BY 4.0.">
@@ -19,7 +19,8 @@
   "url": "https://aipoker-bot.github.io/llm-poker-dataset/",
   "sameAs": "https://github.com/aipoker-bot/llm-poker-dataset",
   "license": "https://creativecommons.org/licenses/by/4.0/",
-  "version": "0.1",
+  "version": "0.2",
+  "dateModified": "2026-11-25",
   "isAccessibleForFree": true,
   "creator": {"@type": "Person", "name": "Nils Harker", "url": "https://github.com/nilsharker"},
   "keywords": ["poker", "large language models", "LLM evaluation", "no-limit hold'em", "AI poker bot"],
@@ -62,7 +63,7 @@ footer a { color: var(--muted); }
 <p class="crumb"><a href="https://github.com/aipoker-bot">aipoker-bot</a> / <a href="https://github.com/aipoker-bot/llm-poker-dataset">llm-poker-dataset</a></p>
 <h1>AI poker bot</h1>
 <p class="lead">What happens when you play poker against language models. Results so far and all hands as open data.</p>
-<p>I have <a href="https://aipoker.bot">aipoker.bot</a> which is a free site to play no-limit hold'em against AI. Most of the seats are language models, the same type of model behind a chatbot (30 from 11 labs) and some of them are small enough you can run them locally. There are some old poker bots too: Shanky PPL profiles, three OpenHoldem bots, Slumbot for heads-up.</p>
+<p>I have <a href="https://aipoker.bot">aipoker.bot</a> which is a free site to play no-limit hold'em against AI. Most of the seats are language models, the same type of model behind a chatbot (37 active seats from 13 labs) and some of them are small enough you can run them locally. There are some old poker bots too: Shanky PPL profiles, three OpenHoldem bots, Slumbot for heads-up.</p>
 <p>I built it to see what a language model plays like against a human. In the poker benchmarks I was seeing they were playing the models against each other/a solver. None of them were recording what the model said about what it did. For each model move you can see the short description from the model. Everything is recorded.</p>
 <p>You can see the table of models that have played enough hands with humans to make some claims about them on this page.</p>
 <p>You can also download the entire hand log.</p>
@@ -106,15 +107,16 @@ footer a { color: var(--muted); }
 </div>
 <p>Illegal, Misfire, and "Claimed a hand it didn't have". These are things you can check without looking at anyone's cards. Illegal and Misfire are fractions of the total decisions by the model. The third one is a fraction of reasons claiming the model had a stronger hand than it actually had. For instance "my flush" but without a flush. A draw is not counted.</p>
 <p>The next three columns are hindsight columns. They consider what cards opponents actually had (which the model could not see). "Folded the best hand": fraction of the model folds where its hand was actually ahead. "Called dead": fraction of the model calls where the odds were clearly against it. "Won at showdown": how often it won when cards were revealed. All of these will depend heavily on what cards were dealt. So think of them as results, not as evaluation.</p>
-<p>Oct 27: two models are over the threshold. The primary difference between them is in the first three columns. GPT-6 Astra had no illegal moves, no misfires, no claiming hands it did not have (1404 decisions). The open weight GLM 4.7 Flash (max hands) had 3% of decisions with an illegal move and 6.5% of reasons claiming a hand it did not have. I did not include win rates on purpose. A few hundred hands and they are mostly luck.</p>
+<p>Nov 25: nineteen models have cleared 1,000 decisions on the live site. Most of the gap between them is still in the first three columns. Frontier models like GPT-6 Astra, Opus 5.5 and Grok 4.7 sit at 0.0% on illegal moves and fabricated hands, while fast or small open-weight models like GLM 4.7 Flash (3.0% illegal, 6.5% fabricated hands) and Llama 3.1 8B (3.8% illegal) break protocol much more often. I did not include win rates on purpose. Over several hundred hands the card run dominates them.</p>
 <h2>The dataset</h2>
 <p>Everything above is from a single log. The log is in <a href="https://github.com/aipoker-bot/llm-poker-dataset">this repo</a>. It's available for any use under the CC BY 4.0 license, so you can do anything with it as long as you credit aipoker.bot.</p>
-<p class="note">v0.1: 5,398 hands from people, 57,065 rows, August 19 to October 27, 2026. <a href="https://github.com/aipoker-bot/llm-poker-dataset/releases">Download from Releases</a> · <a href="https://github.com/aipoker-bot/llm-poker-dataset#readme">data card</a></p>
+<p class="note">v0.2: 11,905 hands from people, 118,206 rows, August 19 to November 25, 2026. <a href="https://github.com/aipoker-bot/llm-poker-dataset/releases">Download from Releases</a> · <a href="https://github.com/aipoker-bot/llm-poker-dataset#readme">data card</a></p>
 <pre><code>import pandas as pd
 
 df = pd.read_json("data/human.jsonl", lines=True)
 llm = df[df.model_id.notna()]
 print(llm.groupby("model_id").outcome.value_counts().unstack(fill_value=0))</code></pre>
+<p><code>python3 scripts/hallucination_detector.py data/human.jsonl</code> runs the same made-hand claim check used on the site.</p>
 <p>Format: JSONL, 1 line per action. Each line is small JSON.</p>
 <p>Each line identifies hand, format, seat, position of seat, cards + stack of seat, street, board, action, amount.</p>
 <p>If the seat is a model, also: model used, prompt version, reason, permitted actions, whether the answer was ok, illegal or a misfire, what the call cost, how long it took.</p>
@@ -129,7 +131,7 @@ print(llm.groupby("model_id").outcome.value_counts().unstack(fill_value=0))</cod
 <p>Hands vs Slumbot are not there. Slumbot uses its own server. So, in the log we have only the human's side of the hands vs slumbot.</p>
 <p>See README for a list of things that are missing and why.</p>
 <h2>Settings that keep models playing</h2>
-<p>Most of the work wasn't even poker. A lot of current models "reason" and will spew their secret thoughts before answering. That slows things down and costs more to respond for all answers. And in table play, a model has 14 seconds (up to 25 for big models) to respond. If the model is thinking too long it just misfires. So for the most part most models failed more than they played with default settings. These are current settings, all on OpenRouter.</p>
+<p>Most of the work wasn't even poker. A lot of current models "reason" and will spew their secret thoughts before answering. That slows things down and costs more to respond for all answers. And in table play, a model has 14 seconds (up to 25 for big models) to respond. If the model is thinking too long it just misfires. So for the most part most models failed more than they played with default settings. These are current settings on OpenRouter (or direct on the provider's API when a route is pinned).</p>
 <div class="scroll">
 <table>
 <thead><tr><th>Model</th><th>Setting</th><th>Without it</th></tr></thead>
@@ -143,7 +145,9 @@ print(llm.groupby("model_id").outcome.value_counts().unstack(fill_value=0))</cod
 <tr><td>GLM 4.7 Flash</td><td><code>reasoning.enabled=false, max_tokens=300</code></td><td>with reasoning: empty answer at 300 tokens, 19 s at 1400</td></tr>
 <tr><td>MiniMax M3</td><td><code>reasoning.enabled=false, five providers excluded</code></td><td>some providers ignore it, spend all 1400 tokens thinking and return nothing</td></tr>
 <tr><td>gpt-oss-20b</td><td><code>reasoning.effort=low, max_tokens=1400</code></td><td>reasoning can&#x27;t be turned off (400)</td></tr>
-<tr><td>Mistral Large 4</td><td><code>reasoning.enabled=false, max_tokens=300</code></td><td>spends 200–1400 tokens reasoning before the JSON</td></tr>
+<tr><td>Gemini 4 Carbon</td><td><code>reasoning.effort=low, max_tokens=1400, Vertex pinned</code></td><td>reasoning can&#x27;t be turned off; AI Studio route stalls past 25 s</td></tr>
+<tr><td>Gemini 4 Hydrogen</td><td><code>reasoning.effort=minimal, max_tokens=1400</code></td><td>turning reasoning off returns an empty response</td></tr>
+<tr><td>Mistral Large 4 (retired)</td><td><code>reasoning.enabled=false, max_tokens=300</code></td><td>retired Nov 6 after provider dropped enabled=false (400) and low effort timed out</td></tr>
 </tbody>
 </table>
 </div>
